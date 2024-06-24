@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Services.AdministratorOne.Abstractions\Services.AdministratorOne.Abstractions.csproj" />
+      <ProjectReference Include="..\Services.AdministratorTwo.Abstractions\Services.AdministratorTwo.Abstractions.csproj" />
+      <ProjectReference Include="..\Services.Common\Services.Common.csproj" />
+      <ProjectReference Include="..\Services.Utilities\Services.Utilities.csproj" />
+      <ProjectReference Include="..\Services.Validations\Services.Validations.csproj" />
+    </ItemGroup>
+
+</Project>
