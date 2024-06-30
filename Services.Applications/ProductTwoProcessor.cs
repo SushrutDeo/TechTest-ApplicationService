@@ -56,26 +56,45 @@ namespace Services.Applications
                 return;
             }
 
-            // This should be under a transaction and if the transaction passes, then only publish the events.
-
             var createInvestorResponse = await _administrationTwoService.CreateInvestorAsync(application.Applicant);
 
-            var investorCreated = new InvestorCreated(application.Applicant.Id, createInvestorResponse.Value.ToString());
+            if (createInvestorResponse.IsSuccess)
+            {
+                var investorCreated = new InvestorCreated(application.Applicant.Id, createInvestorResponse.Value.ToString());
 
-            await _bus.PublishAsync(investorCreated);
+                await _bus.PublishAsync(investorCreated);
+            }
+            else
+            {
+                return;
+            }
 
-            var createAccountResponse = _administrationTwoService.CreateAccountAsync(createInvestorResponse.Value, application.ProductCode);
+            var createAccountResponse = await _administrationTwoService.CreateAccountAsync(createInvestorResponse.Value, application.ProductCode);
 
-            var accountCreated = new AccountCreated(createInvestorResponse.Value.ToString(),
-                application.ProductCode, createAccountResponse.Result.Value.ToString());
+            if (createAccountResponse.IsSuccess)
+            {
+                var accountCreated = new AccountCreated(createInvestorResponse.Value.ToString(),
+                    application.ProductCode, createAccountResponse.Value.ToString());
 
-            await _bus.PublishAsync(accountCreated);
+                await _bus.PublishAsync(accountCreated);
+            }
+            else
+            {
+                return;
+            }
 
-            var paymentProcessResponse = await _administrationTwoService.ProcessPaymentAsync(createAccountResponse.Result.Value, application.Payment);
+            var paymentProcessResponse = await _administrationTwoService.ProcessPaymentAsync(createAccountResponse.Value, application.Payment);
 
-            var paymentProcessed = new ApplicationCompleted(paymentProcessResponse.Value);
+            if (paymentProcessResponse.IsSuccess)
+            {
+                var paymentProcessed = new ApplicationCompleted(paymentProcessResponse.Value);
 
-            await _bus.PublishAsync(paymentProcessed);
+                await _bus.PublishAsync(paymentProcessed);
+            }
+            else
+            { 
+                return;
+            }
         }
     }
 }

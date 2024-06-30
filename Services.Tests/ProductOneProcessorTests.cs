@@ -110,7 +110,7 @@ namespace Services.Tests
 
             // Assert
             _administrationServiceMock.Verify(x => x.CreateInvestor(It.IsAny<CreateInvestorRequest>()), Times.Once);
-            _busMock.Verify(x => x.PublishAsync(It.IsAny<DomainEvent>()), Times.Once);
+            _busMock.Verify(x => x.PublishAsync(It.IsAny<InvestorCreated>()), Times.Once);
         }
 
         [TestMethod]
@@ -136,7 +136,7 @@ namespace Services.Tests
 
             // Assert
             _administrationServiceMock.Verify(x => x.CreateInvestor(It.IsAny<CreateInvestorRequest>()), Times.Once);
-            _busMock.Verify(x => x.PublishAsync(It.IsAny<DomainEvent>()), Times.Never);
+            _busMock.Verify(x => x.PublishAsync(It.IsAny<InvestorCreated>()), Times.Never);
         }
     }
 }
