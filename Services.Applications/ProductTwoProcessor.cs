@@ -56,6 +56,8 @@ namespace Services.Applications
                 return;
             }
 
+            // This should be under a transaction and if the transaction passes, then only publish the events.
+
             var createInvestorResponse = await _administrationTwoService.CreateInvestorAsync(application.Applicant);
 
             var investorCreated = new InvestorCreated(application.Applicant.Id, createInvestorResponse.Value.ToString());

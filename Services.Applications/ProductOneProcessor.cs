@@ -71,9 +71,16 @@ namespace Services.Applications
                 Nino = application.Applicant.Nino
             });
 
-            var domainEvent = new InvestorCreated(application.Applicant.Id, response.InvestorId);
+            if (response != null && !string.IsNullOrWhiteSpace(response.InvestorId))
+            {
+                var domainEvent = new InvestorCreated(application.Applicant.Id, response.InvestorId);
 
-            await _bus.PublishAsync(domainEvent);
+                await _bus.PublishAsync(domainEvent);
+            }
+            else
+            {
+                return;
+            }
         }
     }
 }
